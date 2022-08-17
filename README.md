@@ -132,6 +132,16 @@ The project is published on Maven Central, to be used it must be defined as a [m
 
 ```
 
+And of course the created classes needs `info.hubbitus.annotation.XsdInfo` so the dependency must be added to them as well (be sure to use the same version):
+
+```xml
+<dependency>
+  <groupId>com.fillumina</groupId>
+  <artifactId>xjc-documentation-annotation-plugin</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
+
 ---
 
 ## Rationale (why it is born)
