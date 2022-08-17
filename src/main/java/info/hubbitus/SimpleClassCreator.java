@@ -20,7 +20,7 @@ import javax.tools.ToolProvider;
 /**
  * see: https://www.edureka.co/community/66796/how-to-generate-a-class-at-runtime
  *
- * @author Francesco Illuminati <fillumina@gmail.com>
+ * @author Francesco Illuminati
  */
 public class SimpleClassCreator {
 
