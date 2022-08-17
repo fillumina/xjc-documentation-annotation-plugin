@@ -5,7 +5,7 @@
 
 ### `2.1.0` [17/8/2022] 
  
-The **new parameter** `-XPluginDescriptionAnnotation:annotationClass` expects the full canonical name of an annotation class to be used to contain XSD descriptions. Use [`XsdInfo.jaca`](src/main/java/info/hubbitus/annotation/XsdInfo.java) as template. This way it is not necessary anymore to have this module as a dependency of the generated class.
+The **new parameter** `-XPluginDescriptionAnnotation:annotationClass` expects the full canonical name of an annotation class to be used to contain XSD descriptions. Use [`XsdInfo.java`](src/main/java/info/hubbitus/annotation/XsdInfo.java) as template. This way it is not necessary anymore to have this module as a dependency.
 
 i.e. the following parameter value:
 
@@ -15,7 +15,7 @@ i.e. the following parameter value:
 
 Specifies the `com.fillumina.xsd.model.annotation.XsdInfo` as the annotation class to use. The actual implementation should be available in the project code so that the generated code can be compiled against it.
   
-If no parameter is specified the internal [`XsdInfo.jaca`](src/main/java/info/hubbitus/annotation/XsdInfo.java) is used and this module must be added as a dependency too.
+If no parameter is specified the internal [`XsdInfo.java`](src/main/java/info/hubbitus/annotation/XsdInfo.java) is used and this module must be added as a dependency too.
 
 ```xml
 <dependency>
@@ -143,7 +143,7 @@ The project is published on Maven Central, to be used it must be defined as a [m
             <plugin>
               <groupId>com.fillumina</groupId>
               <artifactId>xjc-documentation-annotation-plugin</artifactId>
-              <version>2.0.0</version>
+              <version>2.1.0</version>
             </plugin>
             
           </plugins>
