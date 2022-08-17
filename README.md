@@ -5,7 +5,7 @@
 
 ### `2.1.0` [17/8/2022] 
  
-The **new parameter** `-XPluginDescriptionAnnotation:annotationClass` expects the full canonical name of an annotation class to be used to contain XSD descriptions. Use [`XsdInfo.java`](src/main/java/info/hubbitus/annotation/XsdInfo.java) as template. This way it is not necessary anymore to have this module as a dependency.
+The **new parameter** `-XPluginDescriptionAnnotation:annotationClass` expects the full canonical name of an annotation class to be used to contain XSD descriptions. Use an annotation defining '`String name();`' method, use [`XsdInfo.java`](src/main/java/info/hubbitus/annotation/XsdInfo.java) as a template. This way it is not necessary anymore to have this module as a dependency.
 
 i.e. the following parameter value:
 
