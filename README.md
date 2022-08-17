@@ -1,23 +1,11 @@
-Note to fillumina's version 2.0+:
-=================================
+# XJC plugin to bring XSD descriptions into annotations of generated classes
 
-Mavenized, refactored and fixed some bugs related to empty entities. A simple java test suite
-has been added too.
 
-The following is the original comments by Hubbitus [Hubbitus /
-xjc-documentation-annotation-plugin](https://github.com/Hubbitus/xjc-documentation-annotation-plugin):
+![Maven Central](https://img.shields.io/maven-central/v/com.fillumina/xjc-documentation-annotation-plugin.svg)
+
+ - `2.0.0` Forked from [Hubbitus's xjc-documentation-annotation-plugin](https://github.com/Hubbitus/xjc-documentation-annotation-plugin), mavenized, refactored and bugfixed. A simple java test suite has been added. It's released on Maven central (see [usage](#mavenusage) ).
 
 -------
-
-[![Autobuild Status](https://travis-ci.org/Hubbitus/xjc-documentation-annotation-plugin.svg?branch=master)](https://travis-ci.org/Hubbitus/xjc-documentation-annotation-plugin)
-
-XJC plugin to bring XSD descriptions into annotations of generated classes
-==========================================================================
-
-[Habr article](https://habr.com/en/post/437914/) (in Russian) describing for what it and how to use.
-
-
-Why that plugin born you may find at the end of readme, but now lets look what it does and how to use it!
 
 ## What it does: \<annotation>\<documentation> -> Java class annotations
 
@@ -66,6 +54,8 @@ public class Customer {
 }
 ```
 
+---
+
 ## How to use
 
 ### Manual call in commandline
@@ -88,45 +78,61 @@ If you want run it manually ensure jar class with plugin in run classpath and ju
 
 See test [XJCPluginDescriptionAnnotationTest](src/test/groovy/info/hubbitus/XJCPluginDescriptionAnnotationTest.groovy) for example.
 
-### Use from Gradle
+### Use from Maven
+<a id="mavenusage"></a>
 
-With [gradle-xjc-plugin](https://github.com/unbroken-dome/gradle-xjc-plugin):
+The project is published on Maven Central, to be used it must be defined as a [maven-jaxb2-plugin](https://www.mojohaus.org/jaxb2-maven-plugin/Documentation/v2.2/index.html) plugin:
 
-```gradle
-plugins {
-  id 'java'
-  id 'org.unbroken-dome.xjc' version '1.4.1' // https://github.com/unbroken-dome/gradle-xjc-plugin
-}
+```xml
+  <plugin>
+    <groupId>org.jvnet.jaxb2.maven2</groupId>
+    <artifactId>maven-jaxb2-plugin</artifactId>
+    <version>0.14.0</version>
+    <executions>
+      <execution>
+        <id>jaxb-generate</id>
+        <goals>
+          <goal>generate</goal>
+        </goals>
+        <configuration>
+          <schemas>
+            <schema>
+                <url>file://${basedir}/src/main/resources/xsd/some-schema.xsd</url>
+            </schema>
+          </schemas>
+          <bindingDirectory>${xsd.dir}</bindingDirectory>
+          <bindingIncludes>
+            <include>*.xjb</include>
+          </bindingIncludes>
+          <extension>true</extension>
+          <args>
+            <arg>-XPluginDescriptionAnnotation</arg>
+          </args>
+          <plugins>
+          
+            <!-- PluginDescriptionAnnotation -->
+            <plugin>
+              <groupId>com.fillumina</groupId>
+              <artifactId>xjc-documentation-annotation-plugin</artifactId>
+              <version>2.0.0</version>
+            </plugin>
+            
+          </plugins>
+          <generatePackage>com.whatever</generatePackage>
+          <generateDirectory>${project.build.directory}/generated-sources/xjc</generateDirectory>
+          <strict>false</strict>
+          <verbose>true</verbose>
+          <removeOldOutput>true</removeOldOutput>
+          <clearOutputDir>true</clearOutputDir>
+          <forceRegenerate>false</forceRegenerate>
+        </configuration>
+      </execution>
+    </executions>
+  </plugin>
 
-...
-
-dependencies {
-  xjcClasspath 'info.hubbitus:xjc-documentation-annotation-plugin:1.0'
-}
-
-// Results by default in `build/xjc/generated-sources`
-xjcGenerate {
-  source = fileTree('src/main/resources') { include '*.xsd' }
-  packageLevelAnnotations = false
-  targetPackage = 'info.hubbitus.xjc.plugin.example'
-  extraArgs = [ '-XPluginDescriptionAnnotation' ]
-}
 ```
-Just run:
 
-    ./gradlew xjcGenerate
-
-Please look complete example in [example-project-gradle](example-project-gradle) directory - it have fully independent gradle project ot demonstrate how to use this plugin..
-
-## Development:
-
-Build:
-
-    ./gradlew jar
-
-Run tests:
-
-    ./gradlew test
+---
 
 ## Rationale (why it is born)
 For our integration we have task load big amount of `XSD` files into `MDM` software (proprietary [Unidata](https://unidata-platform.com/)).
@@ -144,4 +150,28 @@ First approach to parse `XSD` for documentation on groovy works, but was very fr
 I long time search way to bring such annotations into `DTO` classes itself to do not do work twice (generate classes and again parse `XSD` files manually).
 I did not found solution. And it is the reason born of that plugin.
 
+---
+
 ## Licensed under MIT
+
+MIT License
+
+Copyright (c) 2020 Pavel Alexeev
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
