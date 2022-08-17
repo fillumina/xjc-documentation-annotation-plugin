@@ -3,7 +3,31 @@
 
 ![Maven Central](https://img.shields.io/maven-central/v/com.fillumina/xjc-documentation-annotation-plugin.svg)
 
- - `2.0.0` Forked from [Hubbitus's xjc-documentation-annotation-plugin](https://github.com/Hubbitus/xjc-documentation-annotation-plugin), mavenized, refactored and bugfixed. A simple java test suite has been added. It's released on Maven central (see [usage](#mavenusage) ).
+### `2.1.0` [17/8/2022] 
+ 
+The **new parameter** `-XPluginDescriptionAnnotation:annotationClass` expects the full canonical name of an annotation class to be used to contain XSD descriptions. Use [`XsdInfo.jaca`](src/main/java/info/hubbitus/annotation/XsdInfo.java) as template. This way it is not necessary anymore to have this module as a dependency of the generated class.
+
+i.e. the following parameter value:
+
+```
+-XPluginDescriptionAnnotation:annotationClass=com.fillumina.xsd.model.annotation.XsdInfo
+```
+
+Specifies the `com.fillumina.xsd.model.annotation.XsdInfo` as the annotation class to use. The actual implementation should be available in the project code so that the generated code can be compiled against it.
+  
+If no parameter is specified the internal [`XsdInfo.jaca`](src/main/java/info/hubbitus/annotation/XsdInfo.java) is used and this module must be added as a dependency too.
+
+```xml
+<dependency>
+  <groupId>com.fillumina</groupId>
+  <artifactId>xjc-documentation-annotation-plugin</artifactId>
+  <version>2.1.0</version>
+</dependency>
+```
+
+### `2.0.0` [16/8/2022]
+
+Forked from [Hubbitus's xjc-documentation-annotation-plugin](https://github.com/Hubbitus/xjc-documentation-annotation-plugin), mavenized, refactored and bugfixed. A simple java test suite has been added. It's released on Maven central (see [usage](#mavenusage) ).
 
 -------
 
@@ -53,6 +77,8 @@ public class Customer {
     protected String name;
 }
 ```
+
+supposing `@XsdInfo` as your chosen class name.
 
 ---
 
@@ -105,8 +131,11 @@ The project is published on Maven Central, to be used it must be defined as a [m
             <include>*.xjb</include>
           </bindingIncludes>
           <extension>true</extension>
+          
+          <!-- Plugin parameter -->
           <args>
             <arg>-XPluginDescriptionAnnotation</arg>
+            <arg>-XPluginDescriptionAnnotation:annotationClass=com.foo.bar.Baz</arg>
           </args>
           <plugins>
           
@@ -130,16 +159,6 @@ The project is published on Maven Central, to be used it must be defined as a [m
     </executions>
   </plugin>
 
-```
-
-And of course the created classes needs `info.hubbitus.annotation.XsdInfo` so the dependency must be added to them as well (be sure to use the same version):
-
-```xml
-<dependency>
-  <groupId>com.fillumina</groupId>
-  <artifactId>xjc-documentation-annotation-plugin</artifactId>
-  <version>2.0.0</version>
-</dependency>
 ```
 
 ---

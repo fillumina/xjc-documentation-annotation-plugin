@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +69,8 @@ public abstract class RunXJC2MojoTestHelper extends RunXJC2Mojo {
 
     @Override
     public List<String> getArgs() {
-        return Collections.singletonList("-" + XJCPluginDescriptionAnnotation.NAME);
+        return List.of("-" + XJCPluginDescriptionAnnotation.NAME,
+                "-" + XJCPluginDescriptionAnnotation.TARGET_CLASS_NAME + "=com.foo.bar.XsdInfo");
     }
 
     public ArtifactTester element(String elementName) {

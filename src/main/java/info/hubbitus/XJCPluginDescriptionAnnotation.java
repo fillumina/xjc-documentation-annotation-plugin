@@ -17,7 +17,6 @@ import com.sun.xml.xsom.XSComponent;
 import com.sun.xml.xsom.impl.AttributeUseImpl;
 import com.sun.xml.xsom.impl.ParticleImpl;
 import com.sun.xml.xsom.impl.util.SchemaWriter;
-import info.hubbitus.annotation.XsdInfo;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.annotation.Annotation;
@@ -73,7 +72,10 @@ import org.xml.sax.SAXParseException;
  */
 public class XJCPluginDescriptionAnnotation extends Plugin {
 
-    public static final String NAME = "XPluginDescriptionAnnotation";
+    static final String NAME = "XPluginDescriptionAnnotation";
+    static final String TARGET_CLASS_NAME = NAME + ":annotationClass";
+
+    private Class<? extends Annotation> annotationClass;
 
     @Override
     public String getOptionName() {
@@ -82,8 +84,15 @@ public class XJCPluginDescriptionAnnotation extends Plugin {
 
     @Override
     public int parseArgument(Options opt, String[] args, int i) {
-        return 0;
+        ArgumentParser argParser = new ArgumentParser(args[i]);
+
+        argParser.extractString(TARGET_CLASS_NAME)
+                .ifPresent(v -> annotationClass = (Class<? extends Annotation>)
+                        AnnotationClassCreator.INSTANCE.create(v));
+
+        return argParser.getCounter();
     }
+
 
     @Override
     public String getUsage() {
@@ -94,12 +103,17 @@ public class XJCPluginDescriptionAnnotation extends Plugin {
     @Override
     public boolean run(Outline model, Options opt, ErrorHandler errorHandler) throws SAXException {
         try {
+            if (annotationClass == null) {
+                System.out.println(NAME + ": No annotation class specified, using internal 'info.hubbitus.annotation.XsdInfo'");
+                annotationClass = info.hubbitus.annotation.XsdInfo.class;
+            }
+
             model.getClasses().forEach((ClassOutline c) -> {
                 CClassInfo classInfo = c.target;
                 final String description = classInfoGetDescriptionAnnotation(classInfo);
 
                 if (description != null && !description.trim().isEmpty()) {
-                    annotateUnescaped(c.implClass, XsdInfo.class,
+                    annotateUnescaped(c.implClass, annotationClass,
                         Collections.singletonMap("name", description)
                     );
                 }
@@ -113,7 +127,7 @@ public class XJCPluginDescriptionAnnotation extends Plugin {
 
                     final String fieldDescription = fieldGetDescriptionAnnotation(property);
                     if (fieldDescription != null && !fieldDescription.trim().isEmpty()) {
-                        annotateUnescaped(jField, XsdInfo.class,
+                        annotateUnescaped(jField, annotationClass,
                             Collections.singletonMap("name", fieldDescription)
                         );
                     }
