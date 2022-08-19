@@ -23,13 +23,13 @@
   <licenses>
     <license>
       <name>MIT License</name>
-      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <url>http://opensource.org/licenses/mit-license.php</url>
     </license>
   </licenses>  
   
   <scm>
     <connection>scm:git:git@github.com:fillumina/xjc-documentation-annotation-plugin.git</connection>
-    <url>git@github.com:fillumina/xjc-documentation-annotation-plugin.git</url>
+    <url>git@github.com:fillumina/xjc-documentation-annotation-plugin</url>
     <developerConnection>scm:git:git@github.com:fillumina/xjc-documentation-annotation-plugin.git</developerConnection>
   </scm>  
   
